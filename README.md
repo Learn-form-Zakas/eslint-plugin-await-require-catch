@@ -8,15 +8,14 @@
  ```json
  {
      "rules":{
-         ...
-         "await-require-catch": "warn | error"
+         "await-require-catch": "warn"
      },
-     "plugins":[..., "await-require-catch"]
+     "plugins":["await-require-catch"]
  }
  ```
 
 # TODO
 
  - [ ] README doc
- - [ ] Smoke testing
+ - [x] Smoke testing
  - [ ] npm publish

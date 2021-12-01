@@ -19,6 +19,10 @@ module.exports = {
     },
 
     schema: [],
+    messages: {
+      requireCatch: "Add .catch() to avoid error: 'Uncaught (in promise)'",
+      rquireFuncArg: "The first argument is required and must be a Function for .catch()",
+    },
 
     fixable: 'code',
   },
@@ -37,7 +41,7 @@ module.exports = {
     }
 
     /**
-     * Reports a message for this rule.
+     * Reports a message for this rule (no catch).
      * @param {ASTNode} node Identifier
      * @returns {void}
      * @private
@@ -45,17 +49,42 @@ module.exports = {
     function UncaughtInPromiseReport(node) {
       context.report({
         node,
-        message: "Add .catch() to avoid error: 'Uncaught (in promise)'",
+        messageId: 'requireCatch',
         fix(fixer) {
           return fixer.insertTextAfter(chain(node), '.catch(() => {})');
         },
       });
     }
 
+    /**
+     * Reports a message for this rule (catch no args).
+     * @param {ASTNode} node Identifier
+     * @returns {void}
+     * @private
+     * * */
+     function CatchArgumentsReport(node) {
+      const arg = node.parent.parent.arguments[0]||{};
+      if(
+        (!['FunctionExpression', 'ArrowFunctionExpression', 'Identifier'].includes(arg.type) &&
+          arg.name !== 'Function') ||
+        (arg.type === 'Identifier' && arg.name === 'undefined')
+      ){
+        context.report({
+          node,
+          messageId: 'rquireFuncArg',
+          fix(fixer) {
+            const left = node.parent.range[1];
+            const right = node.parent.parent.range[1];
+            return fixer.replaceTextRange([left+1,right-1], "() => {}");
+          }
+        });
+      }
+    }
+
     return {
-      'AwaitExpression > CallExpression > Identifier': UncaughtInPromiseReport,
-      "AwaitExpression > CallExpression > MemberExpression > Identifier[name!='catch']":
-        UncaughtInPromiseReport,
+      "AwaitExpression > CallExpression[callee.type = 'Identifier']": UncaughtInPromiseReport,
+      "AwaitExpression > CallExpression > MemberExpression > Identifier[name!='catch']":UncaughtInPromiseReport,
+      "AwaitExpression > CallExpression > MemberExpression > Identifier[name='catch']": CatchArgumentsReport
     };
   },
 };
