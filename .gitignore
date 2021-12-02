@@ -27,7 +27,7 @@ elasticsearch-*
 config/base.yaml
 _data
 
-# yarn.lock
+yarn.lock
 npm-debug.log*
 package-lock.json
 .cdnkey
