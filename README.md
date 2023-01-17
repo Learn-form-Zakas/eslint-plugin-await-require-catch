@@ -4,7 +4,7 @@
 
 <img src="https://github.com/Learn-form-Zakas/eslint-plugin-await-require-catch/blob/master/screenshot/overview.gif" style="width:80%;"/>
 
-# Installation
+# Installation <a href="https://npmjs.org/package/eslint-plugin-await-require-catch"><img alt="npm version" src="http://img.shields.io/npm/v/eslint-plugin-await-require-catch.svg?style=flat-square"></a> <a href="https://npmjs.org/package/eslint-plugin-await-require-catch"><img alt="npm dm" src="http://img.shields.io/npm/dm/eslint-plugin-await-require-catch.svg?style=flat-square"></a>
 
 You'll first need to install [ESLint](http://eslint.org/):
 

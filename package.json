@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-await-require-catch",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "require add `.catch()` at the end when using function with `await`",
   "main": "index.js",
   "scripts": {
