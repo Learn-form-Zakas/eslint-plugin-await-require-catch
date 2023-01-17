@@ -41,12 +41,28 @@ module.exports = {
     }
 
     /**
+     * 判断是否被try catch包裹
+     * @param {ASTNode} node MemberExpression
+     * @returns {Boolean} 
+     * @private
+     * * */
+    function isTryStatement(node){
+      try {
+        return node.parent.parent.parent.parent.type === 'TryStatement';
+      }catch(err){
+        return false
+      }
+    }
+
+    /**
      * Reports a message for this rule (no catch).
      * @param {ASTNode} node Identifier
      * @returns {void}
      * @private
      * * */
     function UncaughtInPromiseReport(node) {
+      if(isTryStatement(node)) return;
+      
       context.report({
         node,
         messageId: 'requireCatch',
@@ -63,6 +79,8 @@ module.exports = {
      * @private
      * * */
      function CatchArgumentsReport(node) {
+      if(isTryStatement(node)) return;
+
       const arg = node.parent.parent.arguments[0]||{};
       if(
         (!['FunctionExpression', 'ArrowFunctionExpression', 'Identifier'].includes(arg.type) &&

@@ -37,11 +37,19 @@ ruleTester.run('await-require-catch', rule, {
             await b.c().catch(()=>{});
             await b.c.d.e().catch(()=>{});
             await b.c.d.e().then().catch(()=>{});
+            await b.then().then().catch(()=>{});
+            await b.c.d.e().then().then().catch(()=>{});
         }`,
         // 作为参数
         `async function a(){
             b(await c().catch(()=>{}))
         }`,
+        // try catch包裹
+        `async function a(){
+            try {
+                await b()
+            }catch(err){}
+        }`
     ],
     invalid: [
         {
